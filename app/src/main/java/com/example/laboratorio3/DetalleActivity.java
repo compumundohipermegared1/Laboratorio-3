@@ -1,4 +1,4 @@
-package com.example.listaelementos;
+package com.example.laboratorio3;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.listaelementos.models.Contacto;
+import com.example.laboratorio3.models.Contacto;
 
 public class DetalleActivity extends AppCompatActivity {
 

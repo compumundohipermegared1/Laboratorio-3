@@ -16,7 +16,7 @@ idea/workspace.xml
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/java/com/example/listaelementos/MainActivity.java
+app/src/main/java/com/example/laboratorio3/MainActivity.java
 .idea/deploymentTargetDropDown.xml
 .settings/org.eclipse.buildship.core.prefs
 app/.classpath

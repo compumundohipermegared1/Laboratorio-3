@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.listaelementos"
+        applicationId "com.example.laboratorio3"
         minSdk 30
         targetSdk 31
         versionCode 1

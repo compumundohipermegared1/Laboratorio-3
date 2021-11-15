@@ -1,4 +1,4 @@
-package com.example.listaelementos.db;
+package com.example.laboratorio3.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

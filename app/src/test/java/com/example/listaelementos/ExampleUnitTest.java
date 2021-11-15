@@ -1,4 +1,4 @@
-package com.example.listaelementos;
+package com.example.laboratorio3;
 
 import org.junit.Test;
 

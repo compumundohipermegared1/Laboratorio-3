@@ -1,4 +1,4 @@
-package com.example.listaelementos.db;
+package com.example.laboratorio3.db;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.listaelementos.models.Contacto;
+import com.example.laboratorio3.models.Contacto;
 
 import java.util.ArrayList;
 import java.util.List;
