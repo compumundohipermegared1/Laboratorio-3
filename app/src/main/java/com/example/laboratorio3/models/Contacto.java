@@ -1,4 +1,4 @@
-package com.example.listaelementos.models;
+package com.example.laboratorio3.models;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ public class Contacto implements Serializable {
     String paterno;
     String materno;
     String telefono;
-
+    int sexo;  // 1 masculino, 0 femenino
 
     public Long getId() {
         return id;
@@ -51,6 +51,13 @@ public class Contacto implements Serializable {
         this.telefono = telefono;
     }
 
+    public int getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(int sexo) {
+        this.sexo = sexo;
+    }
 
     @Override
     public String toString() {
@@ -60,6 +67,7 @@ public class Contacto implements Serializable {
                 ", paterno='" + paterno + '\'' +
                 ", materno='" + materno + '\'' +
                 ", telefono='" + telefono + '\'' +
+                ", sexo=" + sexo +
                 '}';
     }
 }

@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.laboratorio3.models.Contacto;
 
 public class DetalleActivity extends AppCompatActivity {
 
+    ImageView sexo;
     TextView tvNombre, tvPaterno, tvMaterno, tvTelefono;
 
     @Override
@@ -52,4 +55,9 @@ public class DetalleActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void buttonPress(View view){
+
+    }
+
 }

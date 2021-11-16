@@ -16,6 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/iconoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="256dp" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -63,5 +68,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Telefono del contacto" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

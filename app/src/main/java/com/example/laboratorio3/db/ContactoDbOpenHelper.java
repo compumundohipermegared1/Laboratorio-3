@@ -19,10 +19,11 @@ public class ContactoDbOpenHelper extends SQLiteOpenHelper {
             " nombre TEXT, " +
             " apellido_P TEXT, " +
             " apellido_M TEXT, " +
-            " telefono TEXT); ";
+            " telefono TEXT," +
+            " sexo INTEGER DEFAULT -1); ";
 
-    String INSERT_CONTACTO1 = " INSERT INTO contacto( nombre, apellido_P, apellido_M, telefono )" +
-            "VALUES ('Daniela', 'Galleguillos','Díaz','+66666666666')";
+    String INSERT_CONTACTO1 = " INSERT INTO contacto( nombre, apellido_P, apellido_M, telefono, sexo )" +
+            "VALUES ('Daniela', 'Galleguillos','Díaz','+66666666666', 0)";
 
     public ContactoDbOpenHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, VERSION);
