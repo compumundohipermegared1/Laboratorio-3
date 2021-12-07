@@ -75,26 +75,23 @@
             android:visibility="visible" />
 
         <RadioGroup
-            android:layout_width="162dp"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <RadioButton
-                android:id="@+id/etSexo1"
+                android:id="@+id/rbMasculino"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mujer" />
+                android:checked="false"
+                android:text="Masculino"
+                android:textSize="20sp"/>
 
             <RadioButton
-                android:id="@+id/etSexo2"
+                android:id="@+id/rbFemenino"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hombre" />
-
-            <RadioButton
-                android:id="@+id/etSexo3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="No especifica" />
+                android:text="Femenino"
+                android:textSize="20sp"/>
         </RadioGroup>
 
     </LinearLayout>

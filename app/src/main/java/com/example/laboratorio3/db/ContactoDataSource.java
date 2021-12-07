@@ -7,16 +7,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.ListView;
 
+import com.example.laboratorio3.R;
+import com.example.laboratorio3.adapters.ContactoAdapter;
 import com.example.laboratorio3.models.Contacto;
+import com.example.laboratorio3.models.ContactoUpd;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactoDataSource {
 
+    ListView listView;
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase db;
+    ArrayList<Contacto> datos;
     String TAG = "DB: ";
 
     public ContactoDataSource (Context context){
@@ -57,6 +63,43 @@ public class ContactoDataSource {
         }
 
         return contactos;
+    }
+
+    public void CargarPersonas()
+    {
+        String [] columns = {
+                ContactoUpd._ID,
+                ContactoUpd.COLUMN_NAME_NAME,
+                ContactoUpd.COLUMN_NAME_A_PATERNO,
+                ContactoUpd.COLUMN_NAME_A_MATERNO,
+                ContactoUpd.COLUMN_NAME_PHONE,
+                ContactoUpd.COLUMN_NAME_SEX
+        };
+
+        Cursor cursor = db.query(ContactoUpd.TABLE_NAME, columns, null, null, null, null, null);
+
+        datos = new ArrayList<Contacto>();
+        if(cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast())
+            {
+                int id = cursor.getInt(cursor.getColumnIndex(ContactoUpd._ID));
+                String nombre = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_NAME));
+                String apellido_p = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_PATERNO));
+                String apellido_m = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_MATERNO));
+                String telefono = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_PHONE));
+                int sexo = cursor.getInt(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_SEX));
+
+                Contacto contacto = new Contacto(id, nombre, apellido_p, apellido_m, telefono, sexo);
+                datos.add(contacto);
+
+                cursor.moveToNext();
+            }
+        }
+
+        ContactoAdapter adapter = new ContactoAdapter(null, R.layout.contato_item, datos);
+        listView.setAdapter(adapter);
     }
 
     public Contacto insertarContacto(Contacto contacto){

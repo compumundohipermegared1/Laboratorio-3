@@ -19,15 +19,29 @@ import java.util.List;
 public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
     Context context;
+    private int resource;
     List<Contacto> objects;
 
     public ContactoAdapter(@NonNull Context context, int resource, @NonNull List<Contacto> objects) {
         super(context, resource, objects);
 
         this.context = context;
+        this.resource = resource;
         this.objects = objects;
 
+    }
 
+    @Override
+    public int getCount() {
+        return objects.size();
+    }
+
+    public Contacto getObject(int position) {
+        return objects.get(position);
+    }
+
+    public long getObjectId(int position) {
+        return objects.get(position).getId();
     }
 
     @NonNull
@@ -35,23 +49,37 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View v = convertView;
-        Contacto contacto = objects.get(position);
+
+        if(convertView == null){
+            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inf.inflate(resource, null);
+        }
+
+        Contacto contacto = getObject(position);
         ImageView imguser = (ImageView)v.findViewById(android.R.id.icon);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.contato_item, null);
         TextView tvNombre = view.findViewById(R.id.tvNombreItem);
         TextView tvApellidos = view.findViewById(R.id.tvApellidosItem);
+        TextView tvTelefono = view.findViewById(R.id.tvTelefono);
 
         String nombre = contacto.getNombre();
         String apellidos = contacto.getPaterno()+ " " + contacto.getMaterno();
+        String telefono = contacto.getTelefono();
 
-        tvNombre.setText(nombre);
-        tvApellidos.setText(apellidos);
+        /*
+
+        if(nombre != null)
+            nombre.setText(contacto.getNombre());
+        if(telefono != null)
+            telefono.setText(contacto.getTelefono());
+
+         */
 
         if(imguser != null) {
             if (contacto.getSexo() == 0)
-                imguser.setImageResource(R.drawable.usuario_hombre);
+                imguser.setImageResource(R.drawable.usuario_masculino);
             else if(contacto.getSexo() == 1)
-                imguser.setImageResource(R.drawable.usuario_mujer);
+                imguser.setImageResource(R.drawable.usuario_femenino);
         }
 
         return view;

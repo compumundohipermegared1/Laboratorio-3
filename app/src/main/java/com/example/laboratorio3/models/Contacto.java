@@ -11,6 +11,17 @@ public class Contacto implements Serializable {
     String telefono;
     int sexo;  // 1 masculino, 0 femenino
 
+    public Contacto() {	}
+
+    public Contacto(int id, String nombre, String apellido_p, String apellido_m, String telefono, int sexo) {
+        this.setId((long) id);
+        this.setNombre(nombre);
+        this.setPaterno(paterno);
+        this.setMaterno(materno);
+        this.setTelefono(telefono);
+        this.setSexo(sexo);
+    }
+
     public Long getId() {
         return id;
     }

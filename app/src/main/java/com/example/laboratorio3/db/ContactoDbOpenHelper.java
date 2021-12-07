@@ -8,6 +8,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.laboratorio3.models.ContactoUpd;
+
 public class ContactoDbOpenHelper extends SQLiteOpenHelper {
     public static String DATABASE_NAME = "agenda.db";
     public static int VERSION = 1;
@@ -39,7 +41,12 @@ public class ContactoDbOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        String SQL_ADD_SEX = "ALTER TABLE " + ContactoUpd.TABLE_NAME + " ADD " + ContactoUpd.COLUMN_NAME_SEX + " INTEGER DEFAULT -1";
+        sqLiteDatabase.execSQL(SQL_ADD_SEX);
 
     }
+
+    private static final String SQL_DELETE_ENTRIES =
+            "DROP TABLE IF EXISTS " + ContactoUpd.TABLE_NAME;
 }
