@@ -1,6 +1,7 @@
 package com.example.listaelementos.db;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,9 +23,9 @@ public class ContactoDataSource {
         dbhelper = new ContactoDbOpenHelper(context);
     }
 
-    public void setDb(SQLiteDatabase db){
+    public void openDB() {
         db = dbhelper.getWritableDatabase();
-        Log.i(TAG,"openDB");
+        Log.i(TAG, "openDB");
     }
 
     public void closeDB(){
@@ -32,26 +33,49 @@ public class ContactoDataSource {
         Log.i(TAG,"closeDB");
     }
 
-    @SuppressLint("Range")
     public List<Contacto> obtenerContactos(){
+
         List<Contacto> contactos = new ArrayList<>();
-        String query = "SELECT * FROM contacto ";
+
+        String query = "SELECT * FROM contacto";
         Cursor cursor = db.rawQuery(query, null);
 
-        Log.i (TAG," Filas retornadas" + cursor.getCount());
-        if(cursor.getCount()>0){
+        Log.i(TAG, "Filas retornadas: "+cursor.getCount());
+
+        if(cursor.getCount() > 0){
             while(cursor.moveToNext()){
                 Contacto contacto = new Contacto();
-
-                contacto.setId(cursor.getLong(cursor.getColumnIndex("id")));
-                contacto.setNombre(cursor.getString(cursor.getColumnIndex("nombre")));
-                contacto.setPaterno(cursor.getString(cursor.getColumnIndex("apellido_P")));
-                contacto.setMaterno(cursor.getString(cursor.getColumnIndex("apellido_M")));
-                contacto.setTelefono(cursor.getString(cursor.getColumnIndex("telefono")));
+                contacto.setId(cursor.getLong(0));
+                contacto.setNombre(cursor.getString(1));
+                contacto.setPaterno(cursor.getString(2));
+                contacto.setMaterno(cursor.getString(3));
+                contacto.setTelefono(cursor.getString(4));
 
                 contactos.add(contacto);
             }
         }
+
         return contactos;
+    }
+
+    public Contacto insertarContacto(Contacto contacto){
+        ContentValues valores = new ContentValues();
+        valores.put("nombre", contacto.getNombre());
+        valores.put("apellido_p", contacto.getPaterno());
+        valores.put("apellido_m",contacto.getMaterno());
+        valores.put("telefono", contacto.getTelefono());
+        long insertid = db.insert("contacto",null,valores);
+        contacto.setId(insertid);
+
+        return contacto;
+
+    }
+
+    public boolean eliminarContacto(long id ){
+        String where = "id = " +id;
+        int result = db.delete("contacto", where, null);
+
+        return (result == 1);
+
     }
 }
