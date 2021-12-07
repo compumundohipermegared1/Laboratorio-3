@@ -68,14 +68,7 @@ public class DetalleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD:app/src/main/java/com/example/laboratorio3/DetalleActivity.java
-    public void buttonPress(View view){
-
-    }
-
-=======
     public void eliminarContacto(){
         //id del contacto
     }
->>>>>>> main:app/src/main/java/com/example/listaelementos/DetalleActivity.java
 }

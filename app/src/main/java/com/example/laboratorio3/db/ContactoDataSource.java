@@ -50,6 +50,7 @@ public class ContactoDataSource {
                 contacto.setPaterno(cursor.getString(2));
                 contacto.setMaterno(cursor.getString(3));
                 contacto.setTelefono(cursor.getString(4));
+                contacto.setSexo(cursor.getInt(5));
 
                 contactos.add(contacto);
             }
@@ -64,6 +65,7 @@ public class ContactoDataSource {
         valores.put("apellido_p", contacto.getPaterno());
         valores.put("apellido_m",contacto.getMaterno());
         valores.put("telefono", contacto.getTelefono());
+        valores.put("sexo", contacto.getSexo());
         long insertid = db.insert("contacto",null,valores);
         contacto.setId(insertid);
 

@@ -1,4 +1,4 @@
-package com.example.listaelementos;
+package com.example.laboratorio3;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.listaelementos.db.ContactoDataSource;
-import com.example.listaelementos.models.Contacto;
+import com.example.laboratorio3.db.ContactoDataSource;
+import com.example.laboratorio3.models.Contacto;
+
 
 public class AgregarContatoActivity extends AppCompatActivity {
 
-    EditText etNombre, etPaterno, etMaterno, etTelefono;
+    EditText etNombre, etPaterno, etMaterno, etTelefono, etSexo;
     ContactoDataSource dataSource;
 
     @Override
@@ -30,6 +31,7 @@ public class AgregarContatoActivity extends AppCompatActivity {
         etPaterno = findViewById(R.id.etPaterno);
         etMaterno = findViewById(R.id.etMaterno);
         etTelefono = findViewById(R.id.etTelefono);
+        etSexo = findViewById(R.id.etSexo);
     }
 
     @Override
@@ -62,8 +64,9 @@ public class AgregarContatoActivity extends AppCompatActivity {
         String paterno = etPaterno.getText().toString();
         String materno = etMaterno.getText().toString();
         String telefono = etTelefono.getText().toString();
+        String sexo = etSexo.getText().toString();
 
-        if(crearContacto(nombre, paterno, materno, telefono) != -1){
+        if(crearContacto(nombre, paterno, materno, telefono, sexo) != -1){
             Toast.makeText(this, "contacto agregado", Toast.LENGTH_SHORT).show();
             setResult(1);
             finish();
@@ -76,12 +79,13 @@ public class AgregarContatoActivity extends AppCompatActivity {
 
     }
 
-    public long crearContacto(String nombre,String paterno,String materno,String telefono){
+    public long crearContacto(String nombre, String paterno, String materno, String telefono, String sexo){
         Contacto contacto = new Contacto();
         contacto.setNombre(nombre);
         contacto.setPaterno(paterno);
         contacto.setMaterno(materno);
         contacto.setTelefono(telefono);
+        contacto.setSexo(sexo);
 
         contacto = dataSource.insertarContacto(contacto);
 

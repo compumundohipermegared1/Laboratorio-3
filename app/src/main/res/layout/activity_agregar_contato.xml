@@ -15,34 +15,87 @@
         android:layout_margin="16dp">
 
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nuevo contacto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
         <EditText
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Ingrese el Nombre"
+            android:hintTextColor="#757575"
             android:inputType="textPersonName"
-            android:hint="Ingrese el Nombre" />
+            android:minHeight="48dp" />
+
         <EditText
             android:id="@+id/etPaterno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Ingrese el Apellido Paterno"
+            android:hintTextColor="#757575"
             android:inputType="textPersonName"
-            android:hint="Ingrese el Apellido Paterno" />
+            android:minHeight="48dp" />
+
         <EditText
             android:id="@+id/etMaterno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Ingrese el Apellido Materno"
+            android:hintTextColor="#757575"
             android:inputType="textPersonName"
-            android:hint="Ingrese el Apellido Materno" />
+            android:minHeight="48dp" />
+
         <EditText
             android:id="@+id/etTelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Ingrese el Teléfono"
+            android:hintTextColor="#757575"
             android:inputType="textPersonName"
-            android:hint="Ingrese el Teléfono" />
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="8sp"
+            android:text="Sexo del avatar"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            android:typeface="normal"
+            android:visibility="visible" />
+
+        <RadioGroup
+            android:layout_width="162dp"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/etSexo1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mujer" />
+
+            <RadioButton
+                android:id="@+id/etSexo2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hombre" />
+
+            <RadioButton
+                android:id="@+id/etSexo3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No especifica" />
+        </RadioGroup>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

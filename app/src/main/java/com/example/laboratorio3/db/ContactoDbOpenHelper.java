@@ -15,14 +15,14 @@ public class ContactoDbOpenHelper extends SQLiteOpenHelper {
 
     String CREATE_TABLE_CONTACTO =
             " CREATE TABLE contacto( " +
-            " id INT PRIMARY KEY autoincrement, " +
+            " id INTEGER PRIMARY KEY autoincrement, " +
             " nombre TEXT, " +
-            " apellido_P TEXT, " +
-            " apellido_M TEXT, " +
+            " apellido_p TEXT, " +
+            " apellido_m TEXT, " +
             " telefono TEXT," +
             " sexo INTEGER DEFAULT -1); ";
 
-    String INSERT_CONTACTO1 = " INSERT INTO contacto( nombre, apellido_P, apellido_M, telefono, sexo )" +
+    String INSERT_CONTACTO1 = " INSERT INTO contacto( nombre, apellido_p, apellido_m, telefono, sexo )" +
             "VALUES ('Daniela', 'Galleguillos','Díaz','+66666666666', 0)";
 
     public ContactoDbOpenHelper(@Nullable Context context) {
