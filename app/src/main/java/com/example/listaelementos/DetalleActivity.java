@@ -1,4 +1,4 @@
-package com.example.laboratorio3;
+package com.example.listaelementos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,16 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.laboratorio3.models.Contacto;
+import com.example.listaelementos.models.Contacto;
 
 public class DetalleActivity extends AppCompatActivity {
 
-    ImageView sexo;
     TextView tvNombre, tvPaterno, tvMaterno, tvTelefono;
 
     @Override
@@ -68,14 +65,7 @@ public class DetalleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD:app/src/main/java/com/example/laboratorio3/DetalleActivity.java
-    public void buttonPress(View view){
-
-    }
-
-=======
     public void eliminarContacto(){
         //id del contacto
     }
->>>>>>> main:app/src/main/java/com/example/listaelementos/DetalleActivity.java
 }
