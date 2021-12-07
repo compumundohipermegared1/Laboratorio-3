@@ -76,7 +76,7 @@ public class AgregarContatoActivity extends AppCompatActivity {
                 String apellido_p = datos.get(info.position).getPaterno();
                 String apellido_m = datos.get(info.position).getMaterno();
                 String telefono = datos.get(info.position).getTelefono();
-                final int sexo = datos.get(info.position).getSexo();
+                int sexo = datos.get(info.position).getSexo();
 
                 rbMasculino.setChecked(sexo == 0);
                 rbFemenino.setChecked(sexo == 1);
@@ -151,7 +151,7 @@ public class AgregarContatoActivity extends AppCompatActivity {
         String paterno = etPaterno.getText().toString();
         String materno = etMaterno.getText().toString();
         String telefono = etTelefono.getText().toString();
-        String sexo = etSexo.getText().toString();
+        int sexo = etSexo.getInputType();
 
         if(crearContacto(nombre, paterno, materno, telefono, sexo) != -1){
             Toast.makeText(this, "contacto agregado", Toast.LENGTH_SHORT).show();
@@ -166,13 +166,13 @@ public class AgregarContatoActivity extends AppCompatActivity {
 
     }
 
-    public long crearContacto(String nombre, String paterno, String materno, String telefono, String sexo){
+    public long crearContacto(String nombre, String paterno, String materno, String telefono, int sexo){
         Contacto contacto = new Contacto();
         contacto.setNombre(nombre);
         contacto.setPaterno(paterno);
         contacto.setMaterno(materno);
         contacto.setTelefono(telefono);
-        //contacto.setSexo(sexo);
+        contacto.setSexo(sexo);
 
         contacto = dataSource.insertarContacto(contacto);
 
