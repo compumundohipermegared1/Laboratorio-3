@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese el Nombre"
-            android:hintTextColor="#757575"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -38,7 +37,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese el Apellido Paterno"
-            android:hintTextColor="#757575"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -48,7 +46,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese el Apellido Materno"
-            android:hintTextColor="#757575"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -58,7 +55,6 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese el Teléfono"
-            android:hintTextColor="#757575"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 

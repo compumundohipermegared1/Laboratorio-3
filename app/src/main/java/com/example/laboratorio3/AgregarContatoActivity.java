@@ -57,6 +57,9 @@ public class AgregarContatoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
+        //mover el cursor al registro que se mantuvo pulsado
+        final Long _id = datos.get(info.position).getId();
+
         switch (item.getItemId()) {
             case R.id.edit:
                 //editar registro
@@ -116,7 +119,7 @@ public class AgregarContatoActivity extends AppCompatActivity {
                 //borrar registro
                 String where = ContactoUpd._ID + " = '" + _id + "'";
                 db.delete(ContactoUpd.TABLE_NAME, where,null);
-                CargarPersonas();
+                ContactoDataSource.CargarPersonas();
                 Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show();
                 return true;
             default:

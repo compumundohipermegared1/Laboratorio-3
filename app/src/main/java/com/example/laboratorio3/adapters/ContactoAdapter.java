@@ -57,9 +57,10 @@ public class ContactoAdapter extends ArrayAdapter<Contacto> {
 
         Contacto contacto = getObject(position);
         ImageView imguser = (ImageView)v.findViewById(android.R.id.icon);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.contato_item, null);
-        TextView tvNombre = view.findViewById(R.id.tvNombreItem);
-        TextView tvApellidos = view.findViewById(R.id.tvApellidosItem);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.activity_detalle, null);
+        TextView tvNombre = view.findViewById(R.id.tvNombre);
+        TextView tvPaterno = view.findViewById(R.id.tvPaterno);
+        TextView tvMaterno = view.findViewById(R.id.tvMaterno);
         TextView tvTelefono = view.findViewById(R.id.tvTelefono);
 
         String nombre = contacto.getNombre();

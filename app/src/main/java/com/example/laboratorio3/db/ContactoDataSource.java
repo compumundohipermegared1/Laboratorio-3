@@ -19,10 +19,8 @@ import java.util.List;
 
 public class ContactoDataSource {
 
-    ListView listView;
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase db;
-    ArrayList<Contacto> datos;
     String TAG = "DB: ";
 
     public ContactoDataSource (Context context){
@@ -65,8 +63,13 @@ public class ContactoDataSource {
         return contactos;
     }
 
-    public void CargarPersonas()
+    @SuppressLint("Range")
+    public static void CargarPersonas()
     {
+        ArrayList<Contacto> datos;
+        SQLiteDatabase db = null;
+        ListView listView = null;
+
         String [] columns = {
                 ContactoUpd._ID,
                 ContactoUpd.COLUMN_NAME_NAME,
@@ -84,7 +87,7 @@ public class ContactoDataSource {
             cursor.moveToFirst();
             while(!cursor.isAfterLast())
             {
-                int id = cursor.getInt(cursor.getColumnIndex(ContactoUpd._ID));
+                long id = cursor.getInt(cursor.getColumnIndex(ContactoUpd._ID));
                 String nombre = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_NAME));
                 String apellido_p = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_PATERNO));
                 String apellido_m = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_MATERNO));
@@ -98,7 +101,7 @@ public class ContactoDataSource {
             }
         }
 
-        ContactoAdapter adapter = new ContactoAdapter(null, R.layout.contato_item, datos);
+        ContactoAdapter adapter = new ContactoAdapter(null, R.layout.activity_detalle, datos);
         listView.setAdapter(adapter);
     }
 

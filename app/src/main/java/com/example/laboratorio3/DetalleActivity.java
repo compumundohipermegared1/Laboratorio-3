@@ -17,7 +17,6 @@ import com.example.laboratorio3.models.Contacto;
 
 public class DetalleActivity extends AppCompatActivity {
 
-    ImageView sexo;
     TextView tvNombre, tvPaterno, tvMaterno, tvTelefono;
 
     @Override
@@ -59,7 +58,7 @@ public class DetalleActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_eliminar:
+            case R.id.delete:
                 Toast.makeText(this, "Eliminar", Toast.LENGTH_LONG).show();
                 break;
             default:
