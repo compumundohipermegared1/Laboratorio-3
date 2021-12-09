@@ -1,7 +1,9 @@
 package com.example.laboratorio3;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -18,7 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.laboratorio3.adapters.ContactoAdapter;
 import com.example.laboratorio3.db.ContactoDataSource;
+import com.example.laboratorio3.db.ContactoDbOpenHelper;
 import com.example.laboratorio3.models.Contacto;
 import com.example.laboratorio3.models.ContactoUpd;
 
@@ -28,10 +33,13 @@ import java.util.ArrayList;
 public class AgregarContatoActivity extends AppCompatActivity {
 
     EditText etNombre, etPaterno, etMaterno, etTelefono, etSexo;
+    ListView listView;
     ContactoDataSource dataSource;
     ArrayList<Contacto> datos;
     SQLiteDatabase db;
+    ContactoDbOpenHelper contactoDbOpenHelper;
 
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,62 @@ public class AgregarContatoActivity extends AppCompatActivity {
         etMaterno = findViewById(R.id.etMaterno);
         etTelefono = findViewById(R.id.etTelefono);
         //etSexo = findViewById(R.id.etSexo);
+    }
+     */
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listView = (ListView)findViewById(R.id.lvContactos);
+        registerForContextMenu(listView);
+
+        contactoDbOpenHelper = new ContactoDbOpenHelper(this);
+        db = contactoDbOpenHelper.getWritableDatabase();
+        CargarPersonas();
+    }
+
+    @SuppressLint("Range")
+    public static void CargarPersonas()
+    {
+        ArrayList<Contacto> datos;
+        SQLiteDatabase db = null;
+        ListView listView = null;
+
+        String [] columns = {
+                ContactoUpd._ID,
+                ContactoUpd.COLUMN_NAME_NAME,
+                ContactoUpd.COLUMN_NAME_A_PATERNO,
+                ContactoUpd.COLUMN_NAME_A_MATERNO,
+                ContactoUpd.COLUMN_NAME_PHONE,
+                ContactoUpd.COLUMN_NAME_SEX
+        };
+
+        Cursor cursor = db.query(ContactoUpd.TABLE_NAME, columns, null, null, null, null, null);
+
+        datos = new ArrayList<Contacto>();
+        if(cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast())
+            {
+                long id = cursor.getInt(cursor.getColumnIndex(ContactoUpd._ID));
+                String nombre = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_NAME));
+                String a_paterno = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_PATERNO));
+                String a_materno = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_A_MATERNO));
+                String telefono = cursor.getString(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_PHONE));
+                int sexo = cursor.getInt(cursor.getColumnIndex(ContactoUpd.COLUMN_NAME_SEX));
+
+                Contacto contacto = new Contacto(id, nombre, a_paterno, a_materno, telefono, sexo);
+                datos.add(contacto);
+
+                cursor.moveToNext();
+            }
+        }
+
+        ContactoAdapter adapter = new ContactoAdapter(null, R.layout.contacto_item, datos);
+        listView.setAdapter(adapter);
     }
 
     @Override

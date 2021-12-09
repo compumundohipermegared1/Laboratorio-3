@@ -36,7 +36,7 @@ public class ContactoDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CONTACTO);
         Log.i(TAG,"se creó tabla contacto ");
 
-        db.execSQL(INSERT_CONTACTO1);
+        // db.execSQL(INSERT_CONTACTO1);
         Log.i(TAG,"Insertar contacto ");
     }
 

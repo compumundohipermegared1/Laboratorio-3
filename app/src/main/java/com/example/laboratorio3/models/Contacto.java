@@ -13,7 +13,7 @@ public class Contacto implements Serializable {
 
     public Contacto() {	}
 
-    public Contacto(long id, String nombre, String apellido_p, String apellido_m, String telefono, int sexo) {
+    public Contacto(long id, String nombre, String paterno, String materno, String telefono, int sexo) {
         this.setId(id);
         this.setNombre(nombre);
         this.setPaterno(paterno);
