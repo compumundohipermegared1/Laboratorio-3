@@ -3,22 +3,26 @@ package com.example.laboratorio3;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 import com.example.laboratorio3.ContactoContract.ContactoEntry;
 
@@ -30,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ContactoDbHelper ContactoDbHelper;
     SQLiteDatabase db;
-    ArrayList<Contacto> datos;
+    ArrayList<Contacto> contactos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         CargarContactos();
     }
 
+    @SuppressLint("Range")
     public void CargarContactos()
     {
         String [] columns = {
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor cursor = db.query(ContactoEntry.TABLE_NAME, columns, null, null, null, null, null);
 
-        datos = new ArrayList<Contacto>();
+        contactos = new ArrayList<Contacto>();
         if(cursor.getCount() > 0)
         {
             cursor.moveToFirst();
@@ -69,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
                 int sexo = cursor.getInt(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_SEX));
 
                 Contacto contacto = new Contacto(id, nombre, apellidos, telefono, sexo);
-                datos.add(contacto);
+                contactos.add(contacto);
 
                 cursor.moveToNext();
             }
         }
 
-        ContactoAdapter adapter = new ContactoAdapter(this, R.layout.modelo_lista, datos);
+        ContactoAdapter adapter = new ContactoAdapter(this, R.layout.modelo_lista, contactos);
         listView.setAdapter(adapter);
     }
 
@@ -148,10 +154,10 @@ public class MainActivity extends AppCompatActivity {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
         //mover el cursor al registro que se mantuvo pulsado
-        final int _id = datos.get(info.position).getId();
+        final int _id = contactos.get(info.position).getId();
 
         switch (item.getItemId()) {
-            case R.id.edit:
+            case R.id.action_editar:
 
 
                 //editar registro
@@ -167,10 +173,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //Obtener nombre y telefono del cursor y ponerlo en los EditText correspondientes
-                String nombre = datos.get(info.position).getNombre();
-                String apellidos = datos.get(info.position).getApellidos();
-                String telefono = datos.get(info.position).getTelefono();
-                final int sexo = datos.get(info.position).getSexo();
+                String nombre = contactos.get(info.position).getNombre();
+                String apellidos = contactos.get(info.position).getApellidos();
+                String telefono = contactos.get(info.position).getTelefono();
+                final int sexo = contactos.get(info.position).getSexo();
 
                 rbMasculino.setChecked(sexo == 0);
                 rbFemenino.setChecked(sexo == 1);
@@ -210,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancelar", null);
                 builder.show();
                 return true;
-            case R.id.delete:
+            case R.id.action_eliminar:
 
                 //borrar registro
                 String where = ContactoEntry._ID + " = '" + _id + "'";

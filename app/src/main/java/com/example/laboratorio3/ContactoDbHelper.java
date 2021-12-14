@@ -38,4 +38,9 @@ public class ContactoDbHelper extends SQLiteOpenHelper {
         String SQL_ADD_SEX = "ALTER TABLE " + ContactoEntry.TABLE_NAME + " ADD " + ContactoEntry.COLUMN_NAME_SEX + " INTEGER DEFAULT -1";
         db.execSQL(SQL_ADD_SEX);
     }
+
+    public void onDelete(SQLiteDatabase db, int id) {
+        String SQL_DELETE_CONTACTO = "DETELE FROM " + ContactoEntry.TABLE_NAME + " WHERE 1 = 1 AND " + ContactoEntry._ID + " = " + id;
+        db.execSQL(SQL_DELETE_CONTACTO);
+    }
 }
