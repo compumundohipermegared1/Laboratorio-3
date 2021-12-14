@@ -72,5 +72,11 @@
             android:layout_height="wrap_content"
             android:text="Femenino"
             android:textSize="20sp"/>
+        <RadioButton
+            android:id="@+id/rbNonBinary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Binario"
+            android:textSize="20sp"/>
     </RadioGroup>
 </LinearLayout>

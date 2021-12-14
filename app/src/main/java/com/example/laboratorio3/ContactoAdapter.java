@@ -48,16 +48,18 @@ public class ContactoAdapter extends BaseAdapter {
 		}
 		
 		Contacto r = getItem(arg0);
-		ImageView imguser = (ImageView)v.findViewById(R.id.icon);
+		ImageView imguser = (ImageView)v.findViewById(android.R.id.icon);
 		TextView nombre = (TextView)v.findViewById(R.id.text1);
 		TextView apellidos = (TextView)v.findViewById(R.id.text2);
 		TextView telefono = (TextView)v.findViewById(R.id.text3);
 
 		if(imguser != null) {
 			if (r.getSexo() == 0)
-				imguser.setImageResource(R.drawable.usuario_masculino);
+				imguser.setImageResource(R.drawable.masculino);
 			else if(r.getSexo() == 1)
-				imguser.setImageResource(R.drawable.usuario_femenino);
+				imguser.setImageResource(R.drawable.femenino);
+			else if(r.getSexo() == 2)
+				imguser.setImageResource(R.drawable.non_binary);
 		}
 
 		if(nombre != null)

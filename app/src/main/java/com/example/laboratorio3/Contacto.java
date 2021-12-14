@@ -6,7 +6,7 @@ public class Contacto
 	private String nombre;
 	private String apellidos;
 	private String telefono;
-	private int sexo;  // 0 masculino, 1 femenino
+	private int sexo;  // 0 masculino, 1 femenino, 2 no binario
 	
 	public Contacto() {	}
 
