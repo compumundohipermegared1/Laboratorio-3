@@ -20,6 +20,19 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         />
+
+    <TextView
+        android:text="Apellidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        />
+    <EditText
+        android:id="@+id/etApellidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        />
     <TextView
         android:text="Telefono"
         android:layout_width="match_parent"

@@ -25,14 +25,21 @@
         	android:layout_height="wrap_content"
             android:id="@android:id/text1"
             android:textSize="20sp"
-            android:text="Hola"/>
+            android:text="Nombre"/>
         
         <TextView 
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
             android:textSize="15sp"
             android:id="@android:id/text2"
-            android:text="Hola" />
+            android:text="Apellidos" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:id="@android:id/text3"
+            android:text="telefono" />
         </LinearLayout>
 
 </LinearLayout>

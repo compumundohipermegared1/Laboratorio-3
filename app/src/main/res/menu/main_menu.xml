@@ -4,7 +4,7 @@
     <item
         android:id="@+id/item_menu_nuevo"
         android:title="Nuevo"
-        android:tooltipText="Agregar nueva persona"
+        android:tooltipText="Agregar nueva Contacto"
         android:icon="@android:drawable/ic_menu_add"
         app:showAsAction="always"
         />

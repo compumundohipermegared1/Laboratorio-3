@@ -1,17 +1,19 @@
 package com.example.laboratorio3;
 
-public class Persona 
+public class Contacto 
 {
     private int id;
 	private String nombre;
+	private String apellidos;
 	private String telefono;
 	private int sexo;  // 0 masculino, 1 femenino
 	
-	public Persona() {	}
+	public Contacto() {	}
 
-	public Persona(int id, String nombre, String telefono, int sexo) {
+	public Contacto(int id, String nombre, String apellidos, String telefono, int sexo) {
         this.setId(id);
         this.setNombre(nombre);
+		this.setApellidos(apellidos);
 		this.setTelefono(telefono);
 		this.setSexo(sexo);
 	}
@@ -24,6 +26,12 @@ public class Persona
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	public String getApellidos() {
+		return apellidos;
+	}
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 	public String getTelefono() {
 		return telefono;

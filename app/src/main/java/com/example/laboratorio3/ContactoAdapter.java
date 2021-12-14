@@ -2,6 +2,7 @@ package com.example.laboratorio3;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +11,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sqlitebaseadapter.R;
-
-public class PersonaAdapter extends BaseAdapter {
+public class ContactoAdapter extends BaseAdapter {
 
     private Context ctx;
-    private ArrayList<Persona> items;
+    private ArrayList<Contacto> items;
 	private int layout;
     
-    public PersonaAdapter() { }
+    public ContactoAdapter() { }
     
-	public PersonaAdapter(Context ctx, int layout,  ArrayList<Persona> items) {
+	public ContactoAdapter(Context ctx, int layout,  ArrayList<Contacto> items) {
 		this.ctx = ctx;
 		this.items = items;
 		this.layout = layout;
@@ -31,7 +30,7 @@ public class PersonaAdapter extends BaseAdapter {
 		return items.size();
 	}
 	@Override
-	public Persona getItem(int arg0) {
+	public Contacto getItem(int arg0) {
 		return items.get(arg0);
 	}
 	@Override
@@ -48,20 +47,23 @@ public class PersonaAdapter extends BaseAdapter {
 			v = inf.inflate(layout, null);
 		}
 		
-		Persona r = getItem(arg0);
+		Contacto r = getItem(arg0);
 		ImageView imguser = (ImageView)v.findViewById(android.R.id.icon);
 		TextView nombre = (TextView)v.findViewById(android.R.id.text1);
-		TextView telefono = (TextView)v.findViewById(android.R.id.text2);
+		TextView apellidos = (TextView)v.findViewById(android.R.id.text2);
+		TextView telefono = (TextView)v.findViewById(android.R.id.text3);
 
 		if(imguser != null) {
 			if (r.getSexo() == 0)
-				imguser.setImageResource(R.drawable.usuario_varon);
+				imguser.setImageResource(R.drawable.usuario_masculino);
 			else if(r.getSexo() == 1)
-				imguser.setImageResource(R.drawable.usuario_mujer);
+				imguser.setImageResource(R.drawable.usuario_femenino);
 		}
 
 		if(nombre != null)
 			nombre.setText(r.getNombre());
+		if(apellidos != null)
+			apellidos.setText(r.getApellidos());
 		if(telefono != null)
 			telefono.setText(r.getTelefono());
 

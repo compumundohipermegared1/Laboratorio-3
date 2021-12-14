@@ -1,4 +1,4 @@
-package com.example.sqlitebaseadapter;
+package com.example.laboratorio3;
 
 import org.junit.Test;
 
