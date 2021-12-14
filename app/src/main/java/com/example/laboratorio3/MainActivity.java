@@ -1,146 +1,189 @@
 package com.example.laboratorio3;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
+import com.example.laboratorio3.ContactoContract.ContactoEntry;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.laboratorio3.adapters.ContactoAdapter;
-import com.example.laboratorio3.db.ContactoDataSource;
-import com.example.laboratorio3.models.Contacto;
-import com.example.laboratorio3.models.ContactoUpd;
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    public static final int REQUEST_CODE_AGREGAR_CONTACTO = 1001;
-    public static final String TAG = "MainActivity";
-    public static final int REQUEST_CODE_DETALLE_ACTIVITY = 1002;
-    ListView lvContactos;
-    List<Contacto> contactos;
-    ContactoDataSource dataSource;
-    ArrayAdapter<Contacto> adapter;
-    ArrayList<Contacto> datos;
+public class MainActivity extends AppCompatActivity {
 
+    ListView listView;
+    ContactoDbHelper ContactoDbHelper;
+    SQLiteDatabase db;
+    ArrayList<Contacto> contactos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Agenda");
 
-        lvContactos = findViewById(R.id.lvContactos);
+        listView = (ListView)findViewById(R.id.listView);
+        registerForContextMenu(listView);
 
-
-        dataSource = new ContactoDataSource(this);
-
-        dataSource.openDB();
-        contactos = dataSource.obtenerContactos();
-        dataSource.closeDB();
-
-
-
-        adapter = new ContactoAdapter(this, R.layout.activity_detalle,contactos);
-
-        lvContactos.setAdapter(adapter);
-        lvContactos.setOnItemClickListener(this);
-
-
-
+        ContactoDbHelper = new ContactoDbHelper(this);
+        db = ContactoDbHelper.getWritableDatabase();
+        CargarContactos();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Contacto contacto = contactos.get(i);
-        String nombre = contacto.getNombre();
-        Log.i("MainActivity", "Nombre: " + nombre);
-        Toast.makeText(this, "Click en item " + i, Toast.LENGTH_SHORT).show();
+    @SuppressLint("Range")
+    public void CargarContactos()
+    {
+        String [] columns = {
+                ContactoEntry._ID,
+                ContactoEntry.COLUMN_NAME_NAME,
+                ContactoEntry.COLUMN_NAME_APELLIDOS,
+                ContactoEntry.COLUMN_NAME_PHONE,
+                ContactoEntry.COLUMN_NAME_SEX
+        };
 
-        Intent intent = new Intent(this,DetalleActivity.class);
-        intent.putExtra("nombre", nombre);
-        intent.putExtra("contacto", contacto);
+        Cursor cursor = db.query(ContactoEntry.TABLE_NAME, columns, null, null, null, null, null);
 
-        startActivityForResult(intent, REQUEST_CODE_DETALLE_ACTIVITY);
+        contactos = new ArrayList<Contacto>();
+        if(cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast())
+            {
+                int id = cursor.getInt(cursor.getColumnIndex(ContactoEntry._ID));
+                String nombre = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_NAME));
+                String apellidos = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_APELLIDOS));
+                String telefono = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_PHONE));
+                int sexo = cursor.getInt(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_SEX));
 
+                Contacto contacto = new Contacto(id, nombre, apellidos, telefono, sexo);
+                contactos.add(contacto);
+
+                cursor.moveToNext();
+            }
+        }
+
+        ContactoAdapter adapter = new ContactoAdapter(this, R.layout.modelo_lista, contactos);
+        listView.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_actiivity,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
-    /*
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
-            case R.id.action_agregar_contacto:
-                Intent intent = new Intent(this, AgregarContatoActivity.class);
-                //startActivity(intent);
-                startActivityForResult(intent, REQUEST_CODE_AGREGAR_CONTACTO);
-                break;
-            default:
-                break;
-        }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_menu_nuevo:
 
-        return super.onOptionsItemSelected(item);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                LayoutInflater inflater = getLayoutInflater();
+                View v = inflater.inflate(R.layout.add_edit_layout, null);
+                final EditText etNombre = (EditText)v.findViewById(R.id.etNombre);
+                final EditText etApellidos = (EditText)v.findViewById(R.id.etApellidos);
+                final EditText etTelefono = (EditText)v.findViewById(R.id.etTelefono);
+                final RadioButton rbMasculino  = (RadioButton)v.findViewById(R.id.rbMasculino);
+                final RadioButton rbFemenino  = (RadioButton)v.findViewById(R.id.rbFemenino);
+                final RadioButton rbNonBinary  = (RadioButton)v.findViewById(R.id.rbNonBinary);
+
+                builder.setTitle("Agregar registro");
+                builder.setView(v);
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //codigo para agregar un nuevo registro
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
+                        contentValues.put(ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
+                        contentValues.put(ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
+
+                        int sexo = -1;
+                        if(rbMasculino.isChecked())
+                            sexo = 0;
+                        else if(rbFemenino.isChecked())
+                            sexo = 1;
+                        else if(rbNonBinary.isChecked())
+                            sexo = 2;
+
+                        contentValues.put(ContactoEntry.COLUMN_NAME_SEX, sexo);
+
+                        MainActivity.this.db.insert(ContactoEntry.TABLE_NAME, null, contentValues);
+                        MainActivity.this.CargarContactos();
+                        Toast.makeText(MainActivity.this, "Registro agregado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancelar", null);
+                builder.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-    */
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        SQLiteDatabase db = null;
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 
         //mover el cursor al registro que se mantuvo pulsado
-        final long _id = datos.get(info.position).getId();
+        final int _id = contactos.get(info.position).getId();
 
         switch (item.getItemId()) {
-            case R.id.edit:
+            case R.id.action_editar:
 
 
                 //editar registro
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 LayoutInflater inflater = getLayoutInflater();
-                View v = inflater.inflate(R.layout.activity_agregar_contato, null);
+                View v = inflater.inflate(R.layout.add_edit_layout, null);
                 final EditText etNombre = (EditText)v.findViewById(R.id.etNombre);
-                final EditText etPaterno = (EditText)v.findViewById(R.id.etPaterno);
-                final EditText etMaterno = (EditText)v.findViewById(R.id.etMaterno);
+                final EditText etApellidos = (EditText)v.findViewById(R.id.etApellidos);
                 final EditText etTelefono = (EditText)v.findViewById(R.id.etTelefono);
                 final RadioButton rbMasculino  = (RadioButton)v.findViewById(R.id.rbMasculino);
                 final RadioButton rbFemenino  = (RadioButton)v.findViewById(R.id.rbFemenino);
+                final RadioButton rbNonBinary  = (RadioButton)v.findViewById(R.id.rbNonBinary);
 
 
                 //Obtener nombre y telefono del cursor y ponerlo en los EditText correspondientes
-                String nombre = datos.get(info.position).getNombre();
-                String a_paterno = datos.get(info.position).getPaterno();
-                String a_materno = datos.get(info.position).getMaterno();
-                String telefono = datos.get(info.position).getTelefono();
-                final int sexo = datos.get(info.position).getSexo();
+                String nombre = contactos.get(info.position).getNombre();
+                String apellidos = contactos.get(info.position).getApellidos();
+                String telefono = contactos.get(info.position).getTelefono();
+                final int sexo = contactos.get(info.position).getSexo();
 
                 rbMasculino.setChecked(sexo == 0);
                 rbFemenino.setChecked(sexo == 1);
+                rbNonBinary.setChecked(sexo == 2);
 
                 etNombre.setText(nombre);
-                etPaterno.setText(a_paterno);
-                etMaterno.setText(a_materno);
+                etApellidos.setText(apellidos);
                 etTelefono.setText(telefono);
 
                 builder.setTitle("Editar registro");
@@ -150,33 +193,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onClick(DialogInterface dialog, int which) {
                         //codigo para editar registro
                         ContentValues contentValues = new ContentValues();
-                        contentValues.put(ContactoUpd.COLUMN_NAME_NAME, etNombre.getText().toString());
-                        contentValues.put(ContactoUpd.COLUMN_NAME_NAME, etPaterno.getText().toString());
-                        contentValues.put(ContactoUpd.COLUMN_NAME_NAME, etMaterno.getText().toString());
-                        contentValues.put(ContactoUpd.COLUMN_NAME_PHONE, etTelefono.getText().toString());
+                        contentValues.put(ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
+                        contentValues.put(ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
+                        contentValues.put(ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
 
                         int sexo = -1;
                         if(rbMasculino.isChecked())
                             sexo = 0;
                         else if(rbFemenino.isChecked())
                             sexo = 1;
+                        else if(rbNonBinary.isChecked())
+                            sexo = 2;
 
-                        contentValues.put(ContactoUpd.COLUMN_NAME_SEX, sexo);
+                        contentValues.put(ContactoEntry.COLUMN_NAME_SEX, sexo);
 
-                        String where = ContactoUpd._ID + " = '" + _id + "'";
-                        db.update(ContactoUpd.TABLE_NAME, contentValues, where, null);
-                        AgregarContatoActivity.CargarPersonas();
+                        String where = ContactoEntry._ID + " = '" + _id + "'";
+                        MainActivity.this.db.update(ContactoEntry.TABLE_NAME, contentValues, where, null);
+                        MainActivity.this.CargarContactos();
                         Toast.makeText(MainActivity.this, "Registro editado", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("Cancelar", null);
                 builder.show();
                 return true;
-            case R.id.delete:
+            case R.id.action_eliminar:
+
                 //borrar registro
-                String where = ContactoUpd._ID + " = '" + _id + "'";
-                db.delete(ContactoUpd.TABLE_NAME, where,null);
-                AgregarContatoActivity.CargarPersonas();
+                String where = ContactoEntry._ID + " = '" + _id + "'";
+                db.delete(ContactoEntry.TABLE_NAME, where,null);
+                CargarContactos();
                 Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -185,30 +230,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQUEST_CODE_AGREGAR_CONTACTO && resultCode == 1){
-
-            Log.i(TAG, "actualizar el listview");
-            actualizarLista();
-
-
-        }
-
-        if (requestCode == REQUEST_CODE_DETALLE_ACTIVITY && resultCode == -1){
-            //actualizar
-        }
-
-    }
-
-    public void actualizarLista(){
-        dataSource.openDB();
-        contactos = dataSource.obtenerContactos();
-        dataSource.closeDB();
-
-        adapter.clear();
-        adapter.addAll(contactos);
-        adapter.notifyDataSetChanged();
+    protected void onDestroy() {
+        ContactoDbHelper.close();
+        super.onDestroy();
     }
 }
