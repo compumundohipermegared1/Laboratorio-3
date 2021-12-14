@@ -8,16 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.laboratorio3">
-        <activity
-            android:name=".AgregarContatoActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DetalleActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        android:theme="@style/AppTheme">
+        <activity android:name="com.example.laboratorio3.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

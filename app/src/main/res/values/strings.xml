@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">laboratorio3</string>
+    <string name="app_name">SQLiteBaseAdapter</string>
 
     <string name="activity1">Pantalla 01</string>
     <string name="activity2">Pantalla 02</string>
