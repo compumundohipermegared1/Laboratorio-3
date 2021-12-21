@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1096723357113",
+    "project_id": "agenda-dcbf9",
+    "storage_bucket": "agenda-dcbf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096723357113:android:d937be934d68dc0786ea68",
+        "android_client_info": {
+          "package_name": "com.compumundohipermegared.laboratorio3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096723357113-qqrbuvk0e0kpgare2i2gkfdr0ije50hn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFmHvl5Bob1hip6e-CXTroLYpwGLyYNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1096723357113-qqrbuvk0e0kpgare2i2gkfdr0ije50hn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096723357113:android:294dcdebf43b8a2286ea68",
+        "android_client_info": {
+          "package_name": "com.example.laboratorio3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096723357113-qqrbuvk0e0kpgare2i2gkfdr0ije50hn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFmHvl5Bob1hip6e-CXTroLYpwGLyYNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1096723357113-qqrbuvk0e0kpgare2i2gkfdr0ije50hn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
