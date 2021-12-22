@@ -19,7 +19,7 @@
     </TextView>
 
     <EditText
-        android:id="@+id/et_mail"
+        android:id="@+id/et_recuperacion_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

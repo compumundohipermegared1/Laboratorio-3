@@ -3,28 +3,20 @@ package com.example.laboratorio3;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 public class RegistrarActivity extends AppCompatActivity {
     private static final String TAG = "RegistrarActivity: ";
-    EditText et_mail,et_pass;
+    EditText et_mail,et_pass,et_passConfirmation;
     Button btn_registrar;
     AwesomeValidation awesomeValidation;
     private FirebaseAuth mAuth;
@@ -38,19 +30,23 @@ public class RegistrarActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this,R.id.et_mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomeValidation.addValidation(this,R.id.et_recuperacion_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.et_pass,".{6,}",R.string.invalid_password);
 
-        et_mail = findViewById(R.id.et_mail);
+        et_mail = findViewById(R.id.et_recuperacion_email);
         et_pass = findViewById(R.id.et_pass);
+        et_passConfirmation = findViewById(R.id.et_passconfirmation);
         btn_registrar = findViewById(R.id.btn_registrar);
 
         btn_registrar.setOnClickListener(view -> {
 
             String email = et_mail.getText().toString();
             String password = et_pass.getText().toString();
+            String passwordConfirmation = et_passConfirmation.getText().toString();
 
+            if(password.equals(passwordConfirmation)){
             if(awesomeValidation.validate()) {
+
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 if (currentUser != null) {
                     mAuth.createUserWithEmailAndPassword(email, password)
@@ -69,20 +65,12 @@ public class RegistrarActivity extends AppCompatActivity {
                                     //updateUI(null);
                                 }
                             });
-
-                                /*
-                        if(task.isSuccessful()){
-                            Toast.makeText(RegistrarActivity.this, "Usuario creado con exito", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else {
-                            String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
-                            dameToastdeerror(errorCode);
-                        }
-                    });
-                                */
                 }
             }else {
                 Toast.makeText(RegistrarActivity.this, "Completa todos los datos..!!", Toast.LENGTH_SHORT).show();
+            }
+            }else{
+                Toast.makeText(RegistrarActivity.this, "Contraseñas no coinciden,", Toast.LENGTH_SHORT).show();
             }
         });
     }

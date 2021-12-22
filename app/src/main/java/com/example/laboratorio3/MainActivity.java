@@ -1,7 +1,5 @@
 package com.example.laboratorio3;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +7,8 @@ import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        et_mail = findViewById(R.id.et_mail);
+        et_mail = findViewById(R.id.et_recuperacion_email);
         et_pass = findViewById(R.id.et_pass);
 
         btn_login = findViewById(R.id.btn_login);
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this,R.id.et_mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomeValidation.addValidation(this,R.id.et_recuperacion_email, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.et_pass,".{6,}",R.string.invalid_password);
 
         btn_registrar.setOnClickListener(view -> {
@@ -79,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn_recuperar.setOnClickListener(view -> {
-            //TODO: falta implementar el boton recuperar contraseña
+            Intent i = new Intent(this,recuperarPassActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
         });
 
     }
