@@ -15,4 +15,6 @@
     <string name="verificar_mail">Verificar mail</string>
     <string name="recuperar">Recuperar</string>
     <string name="correo">Correo</string>
+    <string name="coloque_mail">Coloque mail</string>
+    <string name="recuperar_contrase_a">Recuperar contraseña</string>
 </resources>
