@@ -64,6 +64,7 @@ public class recuperarPassActivity extends AppCompatActivity {
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Log.d(TAG, "Email sent.");
+                                    Toast.makeText(recuperarPassActivity.this, "Se envio un correo para que recuperae la contraseña", Toast.LENGTH_SHORT).show();
                                 } else {
                                     String error_message = task.getException().getMessage();
                                     Log.d(TAG, "Error messaege." + error_message);
