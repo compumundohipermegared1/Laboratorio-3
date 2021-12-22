@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +21,13 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity: ";
     Button btn_login,btn_registrar,btn_recuperar;
     EditText et_mail,et_pass;
 
     AwesomeValidation awesomeValidation;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth mAuth;
+    String errorCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,11 @@ public class MainActivity extends AppCompatActivity {
         btn_recuperar = findViewById(R.id.btn_recuperar);
         btn_registrar = findViewById(R.id.btn_registrar);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (user != null){
+        if (currentUser != null){
             iraListaContactos();
         }
 
@@ -58,14 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
         btn_login.setOnClickListener(view -> {
             if (awesomeValidation.validate()){
-                String mail = et_mail.getText().toString();
-                String pass = et_pass.getText().toString();
+                String email = et_mail.getText().toString();
+                String password = et_pass.getText().toString();
 
-                firebaseAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(task -> {
+                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(MainActivity.this, user.toString(), Toast.LENGTH_SHORT).show();
                         iraListaContactos();
                     }else{
-                        String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        errorCode = Objects.requireNonNull(task.getException()).toString();
+                        Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         dameToastdeerror(errorCode);
                     }
                 });
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn_recuperar.setOnClickListener(view -> {
-            //TODO: asdasdasdasd
+            //TODO: falta implementar el boton recuperar contraseña
         });
 
     }

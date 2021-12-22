@@ -33,7 +33,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'com.google.firebase:firebase-database:20.0.3'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.basgeekball:awesome-validation:4.3'
     testImplementation 'junit:junit:'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

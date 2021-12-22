@@ -1,6 +1,7 @@
 package com.example.laboratorio3;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +18,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
 public class RegistrarActivity extends AppCompatActivity {
+    private static final String TAG = "RegistrarActivity: ";
     EditText et_mail,et_pass;
     Button btn_registrar;
     AwesomeValidation awesomeValidation;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -32,7 +35,8 @@ public class RegistrarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this,R.id.et_mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.et_pass,".{6,}",R.string.invalid_password);
@@ -43,19 +47,40 @@ public class RegistrarActivity extends AppCompatActivity {
 
         btn_registrar.setOnClickListener(view -> {
 
-            String mail = et_mail.getText().toString();
-            String pass = et_pass.getText().toString();
+            String email = et_mail.getText().toString();
+            String password = et_pass.getText().toString();
 
-            if(awesomeValidation.validate()){
-                firebaseAuth.createUserWithEmailAndPassword(mail,pass).addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        Toast.makeText(RegistrarActivity.this, "Usuario creado con exito", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }else {
-                        String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
-                        dameToastdeerror(errorCode);
-                    }
-                });
+            if(awesomeValidation.validate()) {
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this, task -> {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Toast.makeText(RegistrarActivity.this, "Usuario creado con exito", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    //updateUI(user);
+                                    finish();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegistrarActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                    //updateUI(null);
+                                }
+                            });
+
+                                /*
+                        if(task.isSuccessful()){
+                            Toast.makeText(RegistrarActivity.this, "Usuario creado con exito", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else {
+                            String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
+                            dameToastdeerror(errorCode);
+                        }
+                    });
+                                */
+                }
             }else {
                 Toast.makeText(RegistrarActivity.this, "Completa todos los datos..!!", Toast.LENGTH_SHORT).show();
             }
