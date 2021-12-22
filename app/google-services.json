@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "436357777779",
-    "project_id": "prueba-1-227915",
-    "storage_bucket": "prueba-1-227915.appspot.com"
+    "project_number": "801169715747",
+    "project_id": "agenda-10142",
+    "storage_bucket": "agenda-10142.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:436357777779:android:68213e3418193dfc0a1d06",
+        "mobilesdk_app_id": "1:801169715747:android:9aae4b68cd0a2d9333f796",
         "android_client_info": {
           "package_name": "com.example.laboratorio3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "436357777779-3g7r0jiel04095ksjijnh9p8h4pvlge8.apps.googleusercontent.com",
+          "client_id": "801169715747-234uou3l2ds3eh0vhfko4tfhpqvgr0lk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCJFuHrj_2irTb6r3JcGzpS0jxa4weEPcs"
+          "current_key": "AIzaSyDceH6rbuBNPMyX9brpBXAJuafUzxPYWSY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "436357777779-3g7r0jiel04095ksjijnh9p8h4pvlge8.apps.googleusercontent.com",
+              "client_id": "801169715747-234uou3l2ds3eh0vhfko4tfhpqvgr0lk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
