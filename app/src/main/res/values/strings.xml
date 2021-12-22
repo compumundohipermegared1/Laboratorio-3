@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">laboratorio3</string>
+    <string name="invalid_mail">Ingrese mail valido</string>
+    <string name="invalid_password">Ingrese un password mayor a 6 digitos</string>
+    <string name="cerrar_sesion">Cerrar sesion</string>
+    <string name="agregar_contacto">Agregar contacto</string>
+    <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

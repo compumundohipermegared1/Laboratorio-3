@@ -1,233 +1,167 @@
 package com.example.laboratorio3;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.util.Patterns;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.Toast;
-import com.example.laboratorio3.ContactoContract.ContactoEntry;
 
-import java.util.ArrayList;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    ContactoDbHelper ContactoDbHelper;
-    SQLiteDatabase db;
-    ArrayList<Contacto> contactos;
+    Button btn_login,btn_registrar,btn_recuperar;
+    EditText et_mail,et_pass;
+
+    AwesomeValidation awesomeValidation;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView)findViewById(R.id.listView);
-        registerForContextMenu(listView);
+        et_mail = findViewById(R.id.et_mail);
+        et_pass = findViewById(R.id.et_pass);
 
-        ContactoDbHelper = new ContactoDbHelper(this);
-        db = ContactoDbHelper.getWritableDatabase();
-        CargarContactos();
-    }
+        btn_login = findViewById(R.id.btn_login);
+        btn_recuperar = findViewById(R.id.btn_recuperar);
+        btn_registrar = findViewById(R.id.btn_registrar);
 
-    @SuppressLint("Range")
-    public void CargarContactos()
-    {
-        String [] columns = {
-                ContactoEntry._ID,
-                ContactoEntry.COLUMN_NAME_NAME,
-                ContactoEntry.COLUMN_NAME_APELLIDOS,
-                ContactoEntry.COLUMN_NAME_PHONE,
-                ContactoEntry.COLUMN_NAME_SEX
-        };
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        Cursor cursor = db.query(ContactoEntry.TABLE_NAME, columns, null, null, null, null, null);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        contactos = new ArrayList<Contacto>();
-        if(cursor.getCount() > 0)
-        {
-            cursor.moveToFirst();
-            while(!cursor.isAfterLast())
-            {
-                int id = cursor.getInt(cursor.getColumnIndex(ContactoEntry._ID));
-                String nombre = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_NAME));
-                String apellidos = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_APELLIDOS));
-                String telefono = cursor.getString(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_PHONE));
-                int sexo = cursor.getInt(cursor.getColumnIndex(ContactoEntry.COLUMN_NAME_SEX));
+        if (user != null){
+            iraListaContactos();
+        }
 
-                Contacto contacto = new Contacto(id, nombre, apellidos, telefono, sexo);
-                contactos.add(contacto);
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+        awesomeValidation.addValidation(this,R.id.et_mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomeValidation.addValidation(this,R.id.et_pass,".{6,}",R.string.invalid_password);
 
-                cursor.moveToNext();
+        btn_registrar.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this,RegistrarActivity.class);
+            startActivity(i);
+        });
+
+        btn_login.setOnClickListener(view -> {
+            if (awesomeValidation.validate()){
+                String mail = et_mail.getText().toString();
+                String pass = et_pass.getText().toString();
+
+                firebaseAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        iraListaContactos();
+                    }else{
+                        String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
+                        dameToastdeerror(errorCode);
+                    }
+                });
             }
+        });
+
+        btn_recuperar.setOnClickListener(view -> {
+            //TODO: asdasdasdasd
+        });
+
+    }
+
+    private void iraListaContactos() {
+        Intent i = new Intent(this,ListaContactosActivity.class);
+        i.putExtra("mail", et_mail.getText().toString());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
+
+
+    private void dameToastdeerror(String error) {
+
+        switch (error) {
+
+            case "ERROR_INVALID_CUSTOM_TOKEN":
+                Toast.makeText(MainActivity.this, "El formato del token personalizado es incorrecto. Por favor revise la documentación", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_CUSTOM_TOKEN_MISMATCH":
+                Toast.makeText(MainActivity.this, "El token personalizado corresponde a una audiencia diferente.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_INVALID_CREDENTIAL":
+                Toast.makeText(MainActivity.this, "La credencial de autenticación proporcionada tiene un formato incorrecto o ha caducado.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_INVALID_EMAIL":
+                Toast.makeText(MainActivity.this, "La dirección de correo electrónico está mal formateada.", Toast.LENGTH_LONG).show();
+                et_mail.setError("La dirección de correo electrónico está mal formateada.");
+                et_mail.requestFocus();
+                break;
+
+            case "ERROR_WRONG_PASSWORD":
+                Toast.makeText(MainActivity.this, "La contraseña no es válida o el usuario no tiene contraseña.", Toast.LENGTH_LONG).show();
+                et_pass.setError("la contraseña es incorrecta ");
+                et_pass.requestFocus();
+                et_pass.setText("");
+                break;
+
+            case "ERROR_USER_MISMATCH":
+                Toast.makeText(MainActivity.this, "Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente..", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_REQUIRES_RECENT_LOGIN":
+                Toast.makeText(MainActivity.this,"Esta operación es sensible y requiere autenticación reciente. Inicie sesión nuevamente antes de volver a intentar esta solicitud.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
+                Toast.makeText(MainActivity.this, "Ya existe una cuenta con la misma dirección de correo electrónico pero diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado a esta dirección de correo electrónico.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_EMAIL_ALREADY_IN_USE":
+                Toast.makeText(MainActivity.this, "La dirección de correo electrónico ya está siendo utilizada por otra cuenta..   ", Toast.LENGTH_LONG).show();
+                et_mail.setError("La dirección de correo electrónico ya está siendo utilizada por otra cuenta.");
+                et_mail.requestFocus();
+                break;
+
+            case "ERROR_CREDENTIAL_ALREADY_IN_USE":
+                Toast.makeText(MainActivity.this, "Esta credencial ya está asociada con una cuenta de usuario diferente.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_DISABLED":
+                Toast.makeText(MainActivity.this, "La cuenta de usuario ha sido inhabilitada por un administrador..", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_TOKEN_EXPIRED":
+
+            case "ERROR_INVALID_USER_TOKEN":
+                Toast.makeText(MainActivity.this, "La credencial del usuario ya no es válida. El usuario debe iniciar sesión nuevamente.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_USER_NOT_FOUND":
+                Toast.makeText(MainActivity.this, "No hay ningún registro de usuario que corresponda a este identificador. Es posible que se haya eliminado al usuario.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_OPERATION_NOT_ALLOWED":
+                Toast.makeText(MainActivity.this, "Esta operación no está permitida. Debes habilitar este servicio en la consola.", Toast.LENGTH_LONG).show();
+                break;
+
+            case "ERROR_WEAK_PASSWORD":
+                Toast.makeText(MainActivity.this, "La contraseña proporcionada no es válida..", Toast.LENGTH_LONG).show();
+                et_pass.setError("La contraseña no es válida, debe tener al menos 6 caracteres");
+                et_pass.requestFocus();
+                break;
+
         }
 
-        ContactoAdapter adapter = new ContactoAdapter(this, R.layout.modelo_lista, contactos);
-        listView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_menu_nuevo:
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                LayoutInflater inflater = getLayoutInflater();
-                View v = inflater.inflate(R.layout.add_edit_layout, null);
-                final EditText etNombre = (EditText)v.findViewById(R.id.etNombre);
-                final EditText etApellidos = (EditText)v.findViewById(R.id.etApellidos);
-                final EditText etTelefono = (EditText)v.findViewById(R.id.etTelefono);
-                final RadioButton rbMasculino  = (RadioButton)v.findViewById(R.id.rbMasculino);
-                final RadioButton rbFemenino  = (RadioButton)v.findViewById(R.id.rbFemenino);
-                final RadioButton rbNonBinary  = (RadioButton)v.findViewById(R.id.rbNonBinary);
-
-                builder.setTitle("Agregar registro");
-                builder.setView(v);
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //codigo para agregar un nuevo registro
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
-                        contentValues.put(ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
-                        contentValues.put(ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
-
-                        int sexo = -1;
-                        if(rbMasculino.isChecked())
-                            sexo = 0;
-                        else if(rbFemenino.isChecked())
-                            sexo = 1;
-                        else if(rbNonBinary.isChecked())
-                            sexo = 2;
-
-                        contentValues.put(ContactoEntry.COLUMN_NAME_SEX, sexo);
-
-                        MainActivity.this.db.insert(ContactoEntry.TABLE_NAME, null, contentValues);
-                        MainActivity.this.CargarContactos();
-                        Toast.makeText(MainActivity.this, "Registro agregado", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancelar", null);
-                builder.show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-
-        //mover el cursor al registro que se mantuvo pulsado
-        final int _id = contactos.get(info.position).getId();
-
-        switch (item.getItemId()) {
-            case R.id.action_editar:
-
-
-                //editar registro
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                LayoutInflater inflater = getLayoutInflater();
-                View v = inflater.inflate(R.layout.add_edit_layout, null);
-                final EditText etNombre = (EditText)v.findViewById(R.id.etNombre);
-                final EditText etApellidos = (EditText)v.findViewById(R.id.etApellidos);
-                final EditText etTelefono = (EditText)v.findViewById(R.id.etTelefono);
-                final RadioButton rbMasculino  = (RadioButton)v.findViewById(R.id.rbMasculino);
-                final RadioButton rbFemenino  = (RadioButton)v.findViewById(R.id.rbFemenino);
-                final RadioButton rbNonBinary  = (RadioButton)v.findViewById(R.id.rbNonBinary);
-
-
-                //Obtener nombre y telefono del cursor y ponerlo en los EditText correspondientes
-                String nombre = contactos.get(info.position).getNombre();
-                String apellidos = contactos.get(info.position).getApellidos();
-                String telefono = contactos.get(info.position).getTelefono();
-                final int sexo = contactos.get(info.position).getSexo();
-
-                rbMasculino.setChecked(sexo == 0);
-                rbFemenino.setChecked(sexo == 1);
-                rbNonBinary.setChecked(sexo == 2);
-
-                etNombre.setText(nombre);
-                etApellidos.setText(apellidos);
-                etTelefono.setText(telefono);
-
-                builder.setTitle("Editar registro");
-                builder.setView(v);
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //codigo para editar registro
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
-                        contentValues.put(ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
-                        contentValues.put(ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
-
-                        int sexo = -1;
-                        if(rbMasculino.isChecked())
-                            sexo = 0;
-                        else if(rbFemenino.isChecked())
-                            sexo = 1;
-                        else if(rbNonBinary.isChecked())
-                            sexo = 2;
-
-                        contentValues.put(ContactoEntry.COLUMN_NAME_SEX, sexo);
-
-                        String where = ContactoEntry._ID + " = '" + _id + "'";
-                        MainActivity.this.db.update(ContactoEntry.TABLE_NAME, contentValues, where, null);
-                        MainActivity.this.CargarContactos();
-                        Toast.makeText(MainActivity.this, "Registro editado", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancelar", null);
-                builder.show();
-                return true;
-            case R.id.action_eliminar:
-
-                //borrar registro
-                String where = ContactoEntry._ID + " = '" + _id + "'";
-                db.delete(ContactoEntry.TABLE_NAME, where,null);
-                CargarContactos();
-                Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        ContactoDbHelper.close();
-        super.onDestroy();
     }
 }

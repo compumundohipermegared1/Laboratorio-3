@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/listView"
+    <TextView
+        android:textSize="25sp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:text="@string/iniciar_sesion"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </TextView>
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="Coloque mail"
+        android:minHeight="48dp"
+        android:textColorHint="@color/colorPrimary"
+        android:importantForAutofill="no">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="Coloque password"
+        android:minHeight="48dp"
+        android:textColorHint="@color/colorPrimary"/>
+
+
+        <Button
+            android:id="@+id/btn_login"
+            android:textColor="#fff"
+            android:text="Login"
+            android:background="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <Button
+            android:id="@+id/btn_recuperar"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:textColor="#fff"
+            android:text="olvide mi contraseña"
+            android:background="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <Button
+            android:id="@+id/btn_registrar"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#fff"
+            android:text="Crear cuenta"
+            android:background="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+</LinearLayout>

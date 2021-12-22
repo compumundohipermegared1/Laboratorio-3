@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_menu_nuevo"
-        android:title="Nuevo"
-        android:tooltipText="Agregar nueva Contacto"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="always"
+        android:title="@string/agregar_contacto"
+        android:tooltipText="Agregar nuevo contacto"
+        />
+
+    <item
+        android:id="@+id/action_cerrar_sesion"
+        android:title="@string/cerrar_sesion"
+        android:tooltipText="Cerrar sesion del usuario"
         />
 </menu>
