@@ -1,11 +1,7 @@
 package com.example.laboratorio3;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,11 +13,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -33,16 +31,13 @@ public class ListaContactosActivity extends AppCompatActivity {
     ContactoDbHelper ContactoDbHelper;
     SQLiteDatabase db;
     ArrayList<Contacto> contactos;
-    Button btn_cerrar_sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_contactos);
-
         listView = (ListView)findViewById(R.id.listView);
         registerForContextMenu(listView);
-
         ContactoDbHelper = new ContactoDbHelper(this);
         db = ContactoDbHelper.getWritableDatabase();
         CargarContactos();
@@ -59,9 +54,9 @@ public class ListaContactosActivity extends AppCompatActivity {
                 ContactoContract.ContactoEntry.COLUMN_NAME_SEX
         };
 
-        Cursor cursor = db.query(ContactoContract.ContactoEntry.TABLE_NAME, columns, null, null, null, null, null);
+        @SuppressLint("Recycle") Cursor cursor = db.query(ContactoContract.ContactoEntry.TABLE_NAME, columns, null, null, null, null, null);
 
-        contactos = new ArrayList<Contacto>();
+        contactos = new ArrayList<>();
         if(cursor.getCount() > 0)
         {
             cursor.moveToFirst();
@@ -87,12 +82,14 @@ public class ListaContactosActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.item_menu_nuevo:
 
@@ -108,41 +105,34 @@ public class ListaContactosActivity extends AppCompatActivity {
 
                 builder.setTitle("Agregar registro");
                 builder.setView(v);
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //codigo para agregar un nuevo registro
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
+                builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                    //codigo para agregar un nuevo registro
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
 
-                        int sexo = -1;
-                        if(rbMasculino.isChecked())
-                            sexo = 0;
-                        else if(rbFemenino.isChecked())
-                            sexo = 1;
-                        else if(rbNonBinary.isChecked())
-                            sexo = 2;
+                    int sexo = -1;
+                    if(rbMasculino.isChecked())
+                        sexo = 0;
+                    else if(rbFemenino.isChecked())
+                        sexo = 1;
+                    else if(rbNonBinary.isChecked())
+                        sexo = 2;
 
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_SEX, sexo);
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_SEX, sexo);
 
-                        ListaContactosActivity.this.db.insert(ContactoContract.ContactoEntry.TABLE_NAME, null, contentValues);
-                        ListaContactosActivity.this.CargarContactos();
-                        Toast.makeText(ListaContactosActivity.this, "Registro agregado", Toast.LENGTH_SHORT).show();
-                    }
+                    ListaContactosActivity.this.db.insert(ContactoContract.ContactoEntry.TABLE_NAME, null, contentValues);
+                    ListaContactosActivity.this.CargarContactos();
+                    Toast.makeText(ListaContactosActivity.this, "Registro agregado", Toast.LENGTH_SHORT).show();
                 });
                 builder.setNegativeButton("Cancelar", null);
                 builder.show();
                 return true;
             case R.id.action_cerrar_sesion:
+                FirebaseAuth.getInstance().signOut();
+                gologin();
 
-                btn_cerrar_sesion = findViewById(R.id.action_cerrar_sesion);
-                btn_cerrar_sesion.setOnClickListener(v1 -> {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(ListaContactosActivity.this, "Sesion cerrada", Toast.LENGTH_SHORT).show();
-                    gologin();
-                });
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -163,6 +153,7 @@ public class ListaContactosActivity extends AppCompatActivity {
         inflater.inflate(R.menu.context_menu, menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -201,30 +192,27 @@ public class ListaContactosActivity extends AppCompatActivity {
 
                 builder.setTitle("Editar registro");
                 builder.setView(v);
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //codigo para editar registro
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
+                builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                    //codigo para editar registro
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_NAME, etNombre.getText().toString());
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_APELLIDOS, etApellidos.getText().toString());
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_PHONE, etTelefono.getText().toString());
 
-                        int sexo = -1;
-                        if(rbMasculino.isChecked())
-                            sexo = 0;
-                        else if(rbFemenino.isChecked())
-                            sexo = 1;
-                        else if(rbNonBinary.isChecked())
-                            sexo = 2;
+                    int sexo1 = -1;
+                    if(rbMasculino.isChecked())
+                        sexo1 = 0;
+                    else if(rbFemenino.isChecked())
+                        sexo1 = 1;
+                    else if(rbNonBinary.isChecked())
+                        sexo1 = 2;
 
-                        contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_SEX, sexo);
+                    contentValues.put(ContactoContract.ContactoEntry.COLUMN_NAME_SEX, sexo1);
 
-                        String where = ContactoContract.ContactoEntry._ID + " = '" + _id + "'";
-                        ListaContactosActivity.this.db.update(ContactoContract.ContactoEntry.TABLE_NAME, contentValues, where, null);
-                        ListaContactosActivity.this.CargarContactos();
-                        Toast.makeText(ListaContactosActivity.this, "Registro editado", Toast.LENGTH_SHORT).show();
-                    }
+                    String where = ContactoContract.ContactoEntry._ID + " = '" + _id + "'";
+                    ListaContactosActivity.this.db.update(ContactoContract.ContactoEntry.TABLE_NAME, contentValues, where, null);
+                    ListaContactosActivity.this.CargarContactos();
+                    Toast.makeText(ListaContactosActivity.this, "Registro editado", Toast.LENGTH_SHORT).show();
                 });
                 builder.setNegativeButton("Cancelar", null);
                 builder.show();

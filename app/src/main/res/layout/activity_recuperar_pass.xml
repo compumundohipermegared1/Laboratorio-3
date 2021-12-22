@@ -17,7 +17,6 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/correo"
-        android:hintTextColor="#546E7A"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:textStyle="bold"

@@ -48,7 +48,7 @@ public class RegistrarActivity extends AppCompatActivity {
             if(awesomeValidation.validate()) {
 
                 FirebaseUser currentUser = mAuth.getCurrentUser();
-                if (currentUser != null) {
+                //if (currentUser != null) {
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(this, task -> {
                                 if (task.isSuccessful()) {
@@ -65,7 +65,7 @@ public class RegistrarActivity extends AppCompatActivity {
                                     //updateUI(null);
                                 }
                             });
-                }
+               // }
             }else {
                 Toast.makeText(RegistrarActivity.this, "Completa todos los datos..!!", Toast.LENGTH_SHORT).show();
             }

@@ -20,9 +20,10 @@
         android:minHeight="48dp"
         android:textAlignment="center"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="70dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/et_pass"
@@ -36,9 +37,10 @@
         android:minHeight="48dp"
         android:textAlignment="center"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_recuperacion_email"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="70dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/et_passconfirmation"

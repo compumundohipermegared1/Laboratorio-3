@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="Coloque mail"
+        android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:textColorHint="@color/colorPrimary"
         android:importantForAutofill="no">
@@ -37,38 +38,36 @@
         android:layout_marginBottom="10dp"
         android:hint="Coloque password"
         android:minHeight="48dp"
-        android:textColorHint="@color/colorPrimary"/>
+        android:textColorHint="@color/colorPrimary"
+        android:inputType="textPassword" />
 
 
-        <Button
-            android:id="@+id/btn_login"
-            android:textColor="#fff"
-            android:text="Login"
-            android:background="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Button>
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="194dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Login"
+        android:textColor="#fff"></Button>
 
-        <Button
-            android:id="@+id/btn_recuperar"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"
-            android:textColor="#fff"
-            android:text="olvide mi contraseña"
-            android:background="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Button>
+    <Button
+        android:id="@+id/btn_recuperar"
+        android:layout_width="197dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        android:text="olvide mi contraseña"
+        android:textColor="#fff"></Button>
 
-        <Button
-            android:id="@+id/btn_registrar"
-            android:padding="5dp"
-            android:layout_marginTop="10dp"
-            android:textColor="#fff"
-            android:text="Crear cuenta"
-            android:background="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Button>
+    <Button
+        android:id="@+id/btn_registrar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        android:text="Crear cuenta"
+        android:textColor="#fff"></Button>
 
 </LinearLayout>
